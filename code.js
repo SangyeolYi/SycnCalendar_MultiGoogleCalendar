@@ -1,7 +1,8 @@
-let primaryEmail = ["you@expample.com"] //イベンの詳細も含めて表示する個人用のアカウント
+let primaryEmail = ["you@expample.com"] //詳細も含めて表示する個人用のアカウント
 let noAuthEmail = ["you@expample.com"] //外部に編集権限を付与できないアカウント
 let otherEmails = ["you@expample.com"] //その他、Syncするアカウント
 let myEmails = primaryEmail.concat(noAuthEmail).concat(otherEmails)
+let syncDays = 30 //同期する日数
 
 function syncCalendars(){
   myEmails.forEach(e=>{
@@ -13,7 +14,7 @@ function syncCalendars(){
 function crudEvents(emailA) {
   var startDate = new Date();
   var endDate = new Date();
-  endDate.setDate(startDate.getDate() + 30); // 例: 30日後
+  endDate.setDate(startDate.getDate() + syncDays); // 例: 30日後
   var calendarA = CalendarApp.getCalendarById(emailA);
   var eventsA = calendarA.getEvents(startDate, endDate);
   
@@ -74,7 +75,7 @@ function crudEvents(emailA) {
 
       if(!existFlg){ //存在しない場合、作成する
         
-        if(emailA === primaryEmail){ 
+        if(primaryEmail.includes(emailA))){ 
           let guests = e.getGuestList()
           let eTitle = `${title}_Blocked by_${addressB}`
           options = {
